@@ -439,16 +439,7 @@ export default function Navbar({
                   <span>Take Interactive Tour</span>
                 </button>
 
-                <button
-                  onClick={() => {
-                    setActiveRole("docs");
-                    setShowMoreMenu(false);
-                  }}
-                  className="w-full px-3.5 py-2 text-left hover:bg-slate-800 flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors cursor-pointer"
-                >
-                  <Layers className="h-3.5 w-3.5 text-slate-400" />
-                  <span>Design System Docs</span>
-                </button>
+                
 
                 <div className="my-1 border-t border-slate-800"></div>
 
