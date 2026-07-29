@@ -4,7 +4,7 @@ import {
   findSimilarComplaints,
   findSimilarToComplaint,
   storeComplaintEmbedding,
-} from "../routes/similarComplaints";
+} from "../services/similarComplaints";   // ✅ correct
 
 const router = Router();
 
