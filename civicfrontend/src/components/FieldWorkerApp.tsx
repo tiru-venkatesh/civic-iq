@@ -518,7 +518,15 @@ export default function FieldWorkerApp({
                 <h4 className="text-sm font-black text-slate-900">{pendingWorker.name}</h4>
                 <p className="text-[10px] text-slate-400 font-mono">{pendingWorker.role}</p>
               </div>
-
+              {/* Demo PIN */}
+<div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
+  <p className="text-xs font-semibold text-blue-700">
+    Demo PIN
+  </p>
+  <p className="text-2xl font-mono font-bold tracking-[0.4em] text-blue-900">
+    0000
+  </p>
+</div>
               {/* PIN dots */}
               <div className="flex items-center justify-center gap-3 py-1">
                 {[0, 1, 2, 3].map((i) => (
@@ -535,7 +543,7 @@ export default function FieldWorkerApp({
                 ))}
               </div>
               {pinError && <p className="text-[10px] text-red-600 font-bold font-mono">Incorrect PIN. Try again.</p>}
-
+               
               {/* Numeric keypad */}
               <div className="grid grid-cols-3 gap-2.5">
                 {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
