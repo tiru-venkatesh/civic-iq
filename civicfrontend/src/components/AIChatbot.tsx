@@ -27,7 +27,7 @@ interface AIChatbotProps {
   activeRole?: "landing" | "admin" | "citizen" | "worker" | "docs";
 }
 
-// Base URL of the civicbackend Express server (single Groq backend, 7 role prompts).
+// Base URL of the civicbackend Express server (single Gemini backend, 7 role prompts).
 // Set VITE_BACKEND_URL (Vite) or NEXT_PUBLIC_BACKEND_URL (Next.js) in your frontend .env
 // to the deployed backend URL, e.g. https://civicbackend.onrender.com
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001"; // Default to localhost for local dev
@@ -143,7 +143,7 @@ export default function AIChatbot({ mode = "floating", activeRole = "landing" }:
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error: any) {
-      console.warn("Could not retrieve live Groq response. Switching to rule-based fallback assistant.", error);
+      console.warn("Could not retrieve live Gemini response. Switching to rule-based fallback assistant.", error);
 
       let fallbackText = "I'm currently running in emergency backup mode due to network status, but I can help you with system guidelines:\n\n";
       const query = textToSend.toLowerCase();
@@ -160,7 +160,7 @@ export default function AIChatbot({ mode = "floating", activeRole = "landing" }:
         fallbackText += "• **General Inquiries**: CIVIC-AI is a secure decision platform linking Citizens, Administrators, and Field Crews together. You can log complaints via the **Citizen App**, monitor dispatches from the **Admin Dashboard**, and perform repairs in the **Field Crew App**.";
       }
 
-      fallbackText += "\n\n*Note: To enable live AI responses, please verify the backend is running and reachable, and that GROQ_API_KEY is configured on the server.*";
+      fallbackText += "\n\n*Note: To enable live AI responses, please verify the backend is running and reachable, and that Gemini_API_KEY is configured on the server.*";
 
       const fallbackMsg: Message = {
         id: `msg-fallback-${Date.now()}`,
@@ -204,7 +204,7 @@ export default function AIChatbot({ mode = "floating", activeRole = "landing" }:
                   <span>Online</span>
                 </span>
               </div>
-              <p className="text-[10px] text-blue-100 font-mono font-medium mt-0.5">Groq Llama Model Active</p>
+              <p className="text-[10px] text-blue-100 font-mono font-medium mt-0.5">Gemini Llama Model Active</p>
             </div>
           </div>
         </div>
@@ -320,7 +320,7 @@ export default function AIChatbot({ mode = "floating", activeRole = "landing" }:
                     <h4 className="text-sm font-display font-bold tracking-tight block">CIVIC-AI Copilot</h4>
                     <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
                   </div>
-                  <p className="text-[10px] text-blue-100 font-mono font-medium">Groq Llama Model Active</p>
+                  <p className="text-[10px] text-blue-100 font-mono font-medium">Gemini Llama Model Active</p>
                 </div>
               </div>
               <button
