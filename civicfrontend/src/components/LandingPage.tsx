@@ -34,7 +34,10 @@ interface LandingPageProps {
 export default function LandingPage({ onSelectRole }: LandingPageProps) {
   const [activeTab, setActiveTab] = useState<string>("all");
 
-  
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div className="bg-white min-h-screen text-slate-800 flex flex-col font-sans">
       
@@ -64,25 +67,25 @@ export default function LandingPage({ onSelectRole }: LandingPageProps) {
           {/* Navigation Anchors */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
             <button
-              onClick={() => document.getElementById("about")?.scrollIntoView()}
+              onClick={() => scrollToSection("about")}
               className="hover:text-[#1565C0] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1565C0]/20 rounded-md px-2 py-1"
             >
               About
             </button>
             <button
-              onClick={() => document.getElementById("portals")?.scrollIntoView()}
+              onClick={() => scrollToSection("portals")}
               className="hover:text-[#1565C0] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1565C0]/20 rounded-md px-2 py-1"
             >
               System Portals
             </button>
             <button
-              onClick={() => document.getElementById("how-it-works")?.scrollIntoView()}
+              onClick={() => scrollToSection("how-it-works")}
               className="hover:text-[#1565C0] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1565C0]/20 rounded-md px-2 py-1"
             >
               How It Works
             </button>
             <button
-              onClick={() => document.getElementById("features")?.scrollIntoView()}
+              onClick={() => scrollToSection("features")}
               className="hover:text-[#1565C0] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1565C0]/20 rounded-md px-2 py-1"
             >
               Why CIVIC-AI
@@ -93,7 +96,7 @@ export default function LandingPage({ onSelectRole }: LandingPageProps) {
           <div className="flex items-center gap-3">
           
             <button
-              onClick={() => document.getElementById("portals")?.scrollIntoView()}
+              onClick={() => scrollToSection("portals")}
               className="bg-[#1565C0] hover:bg-[#0D47A1] text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm flex items-center gap-2 hover:shadow-md focus:ring-4 focus:ring-[#1565C0]/20"
             >
               <span>Access Systems</span>
@@ -135,14 +138,14 @@ export default function LandingPage({ onSelectRole }: LandingPageProps) {
             {/* Quick Action Anchor Buttons */}
             <div className="pt-2 flex flex-col sm:flex-row gap-4">
               <button
-                onClick={() => document.getElementById("portals")?.scrollIntoView()}
+                onClick={() => scrollToSection("portals")}
                 className="bg-[#1565C0] hover:bg-[#0D47A1] text-white px-6 py-3.5 rounded-xl text-base font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 focus:ring-4 focus:ring-[#1565C0]/30"
               >
                 <span>Select Your Portal</span>
                 <ArrowRight className="h-5 w-5" />
               </button>
               <button
-                onClick={() => document.getElementById("how-it-works")?.scrollIntoView()}
+                onClick={() => scrollToSection("how-it-works")}
                 className="bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 px-6 py-3.5 rounded-xl text-base font-bold transition-all flex items-center justify-center gap-2"
               >
                 <span>Learn How It Works</span>
@@ -463,7 +466,97 @@ export default function LandingPage({ onSelectRole }: LandingPageProps) {
       </section>
 
       {/* Why CivicIQ Feature Cards Section */}
-      
+      <section id="features" className="py-20 bg-[#F5F7FA] border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 space-y-12">
+
+          <div className="space-y-3 max-w-3xl mx-auto text-center">
+            <span className="text-xs uppercase font-mono font-bold tracking-widest text-[#1565C0] block">Platform Guarantees</span>
+            <h2 className="text-3xl font-display font-bold text-slate-900 tracking-tight">Why Agencies Choose CIVIC-AI</h2>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              Every decision the system makes is traceable, adjustable, and accountable to the residents it serves.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {/* Feature 1: Explainable AI Reasoning */}
+            <div className="bg-white border border-slate-200 rounded-xl p-7 shadow-sm hover:shadow-lg transition-all duration-300 group text-left">
+              <div className="w-12 h-12 bg-blue-50 text-[#1565C0] rounded-lg flex items-center justify-center mb-5 transition-all group-hover:bg-[#1565C0] group-hover:text-white">
+                <Search className="h-6 w-6" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 mb-2">Explainable AI Reasoning</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Every priority score is broken down into the specific factors that produced it, so administrators can audit and justify each decision line by line.
+              </p>
+            </div>
+
+            {/* Feature 2: Adaptive Priority Weighting */}
+            <div className="bg-white border border-slate-200 rounded-xl p-7 shadow-sm hover:shadow-lg transition-all duration-300 group text-left">
+              <div className="w-12 h-12 bg-blue-50 text-[#1565C0] rounded-lg flex items-center justify-center mb-5 transition-all group-hover:bg-[#1565C0] group-hover:text-white">
+                <Sliders className="h-6 w-6" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 mb-2">Adaptive Priority Weighting</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Adjust how urgency, population impact, and budget constraints are balanced, without waiting on a development cycle to change the model.
+              </p>
+            </div>
+
+            {/* Feature 3: Real-Time Severity Signals */}
+            <div className="bg-white border border-slate-200 rounded-xl p-7 shadow-sm hover:shadow-lg transition-all duration-300 group text-left">
+              <div className="w-12 h-12 bg-blue-50 text-[#1565C0] rounded-lg flex items-center justify-center mb-5 transition-all group-hover:bg-[#1565C0] group-hover:text-white">
+                <Flame className="h-6 w-6" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 mb-2">Real-Time Severity Signals</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Reports involving immediate safety risk are surfaced and escalated automatically, ahead of routine maintenance requests.
+              </p>
+            </div>
+
+            {/* Feature 4: Encrypted Data Custody */}
+            <div className="bg-white border border-slate-200 rounded-xl p-7 shadow-sm hover:shadow-lg transition-all duration-300 group text-left">
+              <div className="w-12 h-12 bg-blue-50 text-[#1565C0] rounded-lg flex items-center justify-center mb-5 transition-all group-hover:bg-[#1565C0] group-hover:text-white">
+                <Lock className="h-6 w-6" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 mb-2">Encrypted Data Custody</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Resident submissions are encrypted at rest and in transit, meeting municipal and federal data-handling requirements.
+              </p>
+            </div>
+
+            {/* Feature 5: Cross-Agency Routing */}
+            <div className="bg-white border border-slate-200 rounded-xl p-7 shadow-sm hover:shadow-lg transition-all duration-300 group text-left">
+              <div className="w-12 h-12 bg-blue-50 text-[#1565C0] rounded-lg flex items-center justify-center mb-5 transition-all group-hover:bg-[#1565C0] group-hover:text-white">
+                <Building className="h-6 w-6" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 mb-2">Cross-Agency Routing</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Complaints spanning multiple departments or jurisdictions are routed to the correct desk automatically, cutting handoff delays.
+              </p>
+            </div>
+
+            {/* Feature 6: Open Records Export */}
+            <div className="bg-white border border-slate-200 rounded-xl p-7 shadow-sm hover:shadow-lg transition-all duration-300 group text-left">
+              <div className="w-12 h-12 bg-blue-50 text-[#1565C0] rounded-lg flex items-center justify-center mb-5 transition-all group-hover:bg-[#1565C0] group-hover:text-white">
+                <ExternalLink className="h-6 w-6" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 mb-2">Open Records Export</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Resolution history and case data export directly to public transparency portals and records-request systems.
+              </p>
+              <button
+                onClick={() => onSelectRole("docs")}
+                className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-[#1565C0] hover:text-[#0D47A1] transition-colors"
+              >
+                <span>View data specs</span>
+                <ChevronRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
       {/* Official Gov Footer */}
       <footer className="bg-white border-t border-slate-200 pt-16 pb-8 px-6 font-sans">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 border-b border-slate-100 pb-12">
