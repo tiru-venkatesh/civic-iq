@@ -392,17 +392,20 @@ export default function FieldWorkerApp({
     setDetailSubTab("nav");
   };
 
-  const handleStartTask = () => {
-    if (!selectedTask) return;
-    if (offlineMode) {
-      setOfflineSyncQueue((prev) => [...prev, { id: selectedTask.id, action: "In Progress", comment: "Task started offline." }]);
-      selectedTask.status = "In Progress";
-    } else {
-      onUpdateComplaintStatus(selectedTask.id, "In Progress", `${worker?.name || "Field crew"} arrived on site and initiated repairs.`, null);
-    }
-    setSelectedTask({ ...selectedTask, status: "In Progress" });
-  };
+const handleStartTask = () => {
+  if (!selectedTask) return;
+  const isDemoJob = selectedTask.id.startsWith("DEMO-JOB-");
 
+  if (isDemoJob) {
+    // Demo job — దీని వెనుక real Firestore document లేదు, backend call skip చేయాలి.
+  } else if (offlineMode) {
+    setOfflineSyncQueue((prev) => [...prev, { id: selectedTask.id, action: "In Progress", comment: "Task started offline." }]);
+    selectedTask.status = "In Progress";
+  } else {
+    onUpdateComplaintStatus(selectedTask.id, "In Progress", `${worker?.name || "Field crew"} arrived on site and initiated repairs.`, null);
+  }
+  setSelectedTask({ ...selectedTask, status: "In Progress" });
+};
   const handleToggleVoiceRecord = () => {
     if (isRecordingVoice) {
       setIsRecordingVoice(false);
@@ -414,45 +417,47 @@ export default function FieldWorkerApp({
   };
 
   const handleMarkResolved = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedTask) return;
+  e.preventDefault();
+  if (!selectedTask) return;
 
-    setProofLoading(true);
-    setTimeout(() => {
-      const finalAfter = afterPhoto || FALLBACK_AFTER_IMAGE;
-      const finalBefore = beforePhoto || selectedTask.images?.[0] || FALLBACK_IMAGE;
-      const finalComment = proofComment || "Infrastructure asset repaired, tested under load, and verified clean.";
+  setProofLoading(true);
+  setTimeout(() => {
+    const finalAfter = afterPhoto || FALLBACK_AFTER_IMAGE;
+    const finalBefore = beforePhoto || selectedTask.images?.[0] || FALLBACK_IMAGE;
+    const finalComment = proofComment || "Infrastructure asset repaired, tested under load, and verified clean.";
+    const isDemoJob = selectedTask.id.startsWith("DEMO-JOB-");
 
-      if (offlineMode) {
-        setOfflineSyncQueue((prev) => [
-          ...prev,
-          {
-            id: selectedTask.id,
-            action: "Resolved",
-            comment: finalComment,
-            photo: finalAfter,
-            details: { beforePhoto: finalBefore, afterPhoto: finalAfter, voiceNote: recordedVoiceNote || undefined }
-          }
-        ]);
-        selectedTask.status = "Resolved";
-      } else {
-        onUpdateComplaintStatus(selectedTask.id, "Resolved", finalComment, finalAfter, {
-          beforePhoto: finalBefore,
-          afterPhoto: finalAfter,
-          voiceNote: recordedVoiceNote || undefined
-        });
-      }
+    if (isDemoJob) {
+      // Demo job — backend write skip చేయాలి, local UI reset మాత్రమే చేస్తాం.
+    } else if (offlineMode) {
+      setOfflineSyncQueue((prev) => [
+        ...prev,
+        {
+          id: selectedTask.id,
+          action: "Resolved",
+          comment: finalComment,
+          photo: finalAfter,
+          details: { beforePhoto: finalBefore, afterPhoto: finalAfter, voiceNote: recordedVoiceNote || undefined }
+        }
+      ]);
+      selectedTask.status = "Resolved";
+    } else {
+      onUpdateComplaintStatus(selectedTask.id, "Resolved", finalComment, finalAfter, {
+        beforePhoto: finalBefore,
+        afterPhoto: finalAfter,
+        voiceNote: recordedVoiceNote || undefined
+      });
+    }
 
-      setProofLoading(false);
-      setProofComment("");
-      setBeforePhoto(null);
-      setAfterPhoto(null);
-      setRecordedVoiceNote(null);
-      setSelectedTask(null);
-      setActiveTab("my_jobs");
-    }, 1000);
-  };
-
+    setProofLoading(false);
+    setProofComment("");
+    setBeforePhoto(null);
+    setAfterPhoto(null);
+    setRecordedVoiceNote(null);
+    setSelectedTask(null);
+    setActiveTab("my_jobs");
+  }, 1000);
+};
   const triggerOfflineSync = () => {
     if (offlineSyncQueue.length === 0) return;
     offlineSyncQueue.forEach((item) => {
