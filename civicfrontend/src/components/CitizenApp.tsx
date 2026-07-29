@@ -51,6 +51,7 @@ import {
 } from "lucide-react";
 import { Complaint, AIAnalysis } from "../types";
 import SmartCityMap from "./SmartCityMap";
+import logo from "../assets/1.jpg";
 import AnimatedCounter from "./AnimatedCounter";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://civic-iq.onrender.com"; // Backend API base URL (set in .env)
 // Predefined categories with friendly icons and descriptions
@@ -794,10 +795,11 @@ const handleToggleVoice = () => {
               <div className="flex flex-col items-center relative z-10">
                 <div className="p-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-2xl mb-4">
                   <img
-                    alt="CivicIQ Seal"
-                    className="w-20 h-20 rounded-full object-cover border-2 border-white shadow-md"
-                    referrerPolicy="no-referrer"
-                  />
+  src={logo}  // మీ logo hosted path లేదా public/ లో పెట్టిన ఫైల్ పేరు
+  alt="CivicIQ Seal"
+  className="w-20 h-20 rounded-full object-cover border-2 border-white shadow-md"
+  referrerPolicy="no-referrer"
+/>
                 </div>
                 <h1 className="text-3xl font-display font-extrabold tracking-tight text-white">Civic-IQ</h1>
                 <p className="text-xs text-blue-200 font-medium mt-1">Brihanmumbai Municipal Corporation</p>
