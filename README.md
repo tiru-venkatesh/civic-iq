@@ -30,7 +30,7 @@ Instead of manually sorting thousands of complaints every day, Civic-IQ enables 
 
 # 🚀 Live Demo
 
-🔗 **https://civic-iq-pearl.vercel.app**
+🔗 **https://civic_-iq.vercel.app**
 
 ---
 
