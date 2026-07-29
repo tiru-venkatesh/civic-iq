@@ -199,9 +199,7 @@ export default function AIChatbot({ mode = "floating", activeRole = "landing" }:
             <div>
               <div className="flex items-center gap-2">
                 <h4 className="text-sm font-display font-bold tracking-tight block">CIVIC-AI Copilot</h4>
-                <span className="inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-300 text-[8px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-emerald-400/20">
-                  
-                </span>
+                
               </div>
               <p className="text-[10px] text-blue-100 font-mono font-medium mt-0.5">Gemini Llama Model Active</p>
             </div>
