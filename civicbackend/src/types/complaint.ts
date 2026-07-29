@@ -1,34 +1,19 @@
-// civicfrontend/src/types.ts
+// src/types/complaint.ts
+// Backend-side mirror of civicfrontend's Complaint type
+// (civicfrontend/src/types.ts) — only the fields the backend needs,
+// plus `embedding`, which the backend adds for similarity search.
+// Keep in sync manually if the frontend shape changes.
 
 export interface AIAnalysis {
   classification: string;
   category: string;
-  confidence: number;
-  reasoning: string;
   severity: "Low" | "Medium" | "High" | "Critical";
-  populationAffected: number;
-  delayImpactScore: number;
-  budgetRequired: number;
-  timeToRepairHours: number;
   priorityScore: number;
   isDuplicate: boolean;
   duplicateGroup: string | null;
 }
 
-export interface ComplaintHistoryEntry {
-  status: "Pending" | "Assigned" | "Accepted" | "In Progress" | "Resolved";
-  updatedAt: string;
-  comment: string;
-  updatedBy: string;
-}
-
-export interface CompletionProof {
-  photos: string[];
-  completedAt: string;
-  comments: string;
-}
-
-export interface Complaint {
+export interface StoredComplaint {
   id: string;
   title: string;
   description: string;
@@ -37,35 +22,13 @@ export interface Complaint {
   latitude: number;
   longitude: number;
   address: string;
-  reportedBy: string;
-  reportedAt: string;
-  images: string[];
-  voiceTranscript: string | null;
-  assignedWorkerId: string | null;
-  /** Only set on some complaints (e.g. resolved ones). */
-  assignedWorkerName?: string;
-  completionProof: CompletionProof | null;
-  history: ComplaintHistoryEntry[];
-  aiAnalysis: AIAnalysis;
+  aiAnalysis?: AIAnalysis;
+  /** Set by storeComplaintEmbedding(); absent until then. */
+  embedding?: number[];
 }
 
-export interface FieldWorker {
-  id: string;
-  name: string;
-  role: string;
-  department: string;
-  status: string;
-  currentLat: number;
-  currentLng: number;
-  phone: string;
-  avatar: string;
-}
-
-export interface Notification {
-  id: string;
-  role: string;
-  title: string;
-  message: string;
-  createdAt: string;
-  read: boolean;
+export interface SimilarComplaintMatch {
+  complaint: StoredComplaint;
+  /** Cosine similarity, 0–1. */
+  similarity: number;
 }
