@@ -34,13 +34,7 @@ interface LandingPageProps {
 export default function LandingPage({ onSelectRole }: LandingPageProps) {
   const [activeTab, setActiveTab] = useState<string>("all");
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
+  
   return (
     <div className="bg-white min-h-screen text-slate-800 flex flex-col font-sans">
       
@@ -49,7 +43,7 @@ export default function LandingPage({ onSelectRole }: LandingPageProps) {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           
           {/* Logo & Platform Name */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo(0,0)}>
             <img
               src={logo}
               alt="CIVIC-AI Logo"
@@ -70,25 +64,25 @@ export default function LandingPage({ onSelectRole }: LandingPageProps) {
           {/* Navigation Anchors */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
             <button
-              onClick={() => scrollToSection("about")}
+              onClick={() => document.getElementById("about")?.scrollIntoView()}
               className="hover:text-[#1565C0] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1565C0]/20 rounded-md px-2 py-1"
             >
               About
             </button>
             <button
-              onClick={() => scrollToSection("portals")}
+              onClick={() => document.getElementById("portals")?.scrollIntoView()}
               className="hover:text-[#1565C0] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1565C0]/20 rounded-md px-2 py-1"
             >
               System Portals
             </button>
             <button
-              onClick={() => scrollToSection("how-it-works")}
+              onClick={() => document.getElementById("how-it-works")?.scrollIntoView()}
               className="hover:text-[#1565C0] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1565C0]/20 rounded-md px-2 py-1"
             >
               How It Works
             </button>
             <button
-              onClick={() => scrollToSection("features")}
+              onClick={() => document.getElementById("features")?.scrollIntoView()}
               className="hover:text-[#1565C0] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1565C0]/20 rounded-md px-2 py-1"
             >
               Why CIVIC-AI
@@ -99,7 +93,7 @@ export default function LandingPage({ onSelectRole }: LandingPageProps) {
           <div className="flex items-center gap-3">
           
             <button
-              onClick={() => scrollToSection("portals")}
+              onClick={() => document.getElementById("portals")?.scrollIntoView()}
               className="bg-[#1565C0] hover:bg-[#0D47A1] text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm flex items-center gap-2 hover:shadow-md focus:ring-4 focus:ring-[#1565C0]/20"
             >
               <span>Access Systems</span>
@@ -141,14 +135,14 @@ export default function LandingPage({ onSelectRole }: LandingPageProps) {
             {/* Quick Action Anchor Buttons */}
             <div className="pt-2 flex flex-col sm:flex-row gap-4">
               <button
-                onClick={() => scrollToSection("portals")}
+                onClick={() => document.getElementById("portals")?.scrollIntoView()}
                 className="bg-[#1565C0] hover:bg-[#0D47A1] text-white px-6 py-3.5 rounded-xl text-base font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 focus:ring-4 focus:ring-[#1565C0]/30"
               >
                 <span>Select Your Portal</span>
                 <ArrowRight className="h-5 w-5" />
               </button>
               <button
-                onClick={() => scrollToSection("how-it-works")}
+                onClick={() => document.getElementById("how-it-works")?.scrollIntoView()}
                 className="bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 px-6 py-3.5 rounded-xl text-base font-bold transition-all flex items-center justify-center gap-2"
               >
                 <span>Learn How It Works</span>
