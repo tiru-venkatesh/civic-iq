@@ -130,6 +130,71 @@ const DEMO_WORKERS: any[] = [
   },
 ];
 
+// STATIC FALLBACK JOBS — shown in "Available Jobs" queue whenever there are
+// zero real complaints dispatched to the logged-in worker, so the crew screen
+// never looks empty in a demo. These are cosmetic only: tapping "Accept Job
+// Order" on one of these just moves it into "My Jobs" locally (no real
+// complaint record exists for these IDs, so it won't write back to your
+// actual complaints data). The moment a real complaint gets dispatched to
+// this worker, these disappear automatically and the real one takes over.
+const DEMO_AVAILABLE_JOBS: any[] = [
+  {
+    id: "DEMO-JOB-1",
+    title: "Pothole Repair Needed Near Andheri East Metro",
+    description:
+      "Deep pothole reported by commuters on the service road, causing two-wheeler skidding risk during rain.",
+    category: "Road Damage & Potholes",
+    status: "Assigned",
+    latitude: 19.1176,
+    longitude: 72.8561,
+    address: "WEH Junction, Andheri East, Mumbai 400069",
+    images: ["https://images.unsplash.com/photo-1515162305285-0293e4767cc2?w=600&auto=format&fit=crop&q=80"],
+    assignedWorkerId: "__DEMO__",
+    aiAnalysis: {
+      severity: "High",
+      priorityScore: 88,
+      reasoning: "High footfall arterial road with elevated two-wheeler accident risk after recent rain.",
+      timeToRepairHours: 3,
+    },
+  },
+  {
+    id: "DEMO-JOB-2",
+    title: "Water Leakage Near Bandra Station West",
+    description: "Ruptured pipe joint flooding the footpath outside the station, disrupting pedestrian movement.",
+    category: "Water Leakage",
+    status: "Assigned",
+    latitude: 19.0596,
+    longitude: 72.8397,
+    address: "S.V. Road, Bandra West, Mumbai 400050",
+    images: ["https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&auto=format&fit=crop&q=80"],
+    assignedWorkerId: "__DEMO__",
+    aiAnalysis: {
+      severity: "Medium",
+      priorityScore: 74,
+      reasoning: "Localized leak affecting pedestrian footpath near transit hub.",
+      timeToRepairHours: 2,
+    },
+  },
+  {
+    id: "DEMO-JOB-3",
+    title: "Streetlight Cluster Down Near Powai Lake Promenade",
+    description: "Multiple streetlights along the jogging track are non-functional, raising evening safety concerns.",
+    category: "Public Lighting & Exposed Wires",
+    status: "Assigned",
+    latitude: 19.1197,
+    longitude: 72.9051,
+    address: "Hiranandani Gardens Promenade, Powai, Mumbai 400076",
+    images: ["https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=600&auto=format&fit=crop&q=80"],
+    assignedWorkerId: "__DEMO__",
+    aiAnalysis: {
+      severity: "Medium",
+      priorityScore: 70,
+      reasoning: "Dark stretch near jogging track increases evening pedestrian safety risk.",
+      timeToRepairHours: 1.5,
+    },
+  },
+];
+
 export default function FieldWorkerApp({
   complaints = [],
   worker: workerProp,
@@ -284,9 +349,13 @@ export default function FieldWorkerApp({
   //    Requires status === "Assigned" (set by admin's dispatch action) AND assignedWorkerId
   //    matches this worker — a complaint sitting at "Pending" is still in the admin queue and
   //    must NOT appear here. This is what enforces "mandatory admin dispatch for all complaints".
-  const availableJobs = complaints.filter(
+  const realAvailableJobs = complaints.filter(
     (c) => c.status === "Assigned" && c.assignedWorkerId === worker?.id
   );
+  // Fallback: if no real jobs are currently dispatched to this worker, show
+  // static demo jobs instead so the queue never renders empty. Real
+  // dispatched jobs always take priority the moment they exist.
+  const availableJobs = realAvailableJobs.length > 0 ? realAvailableJobs : DEMO_AVAILABLE_JOBS;
 
   // 2. My Active Jobs: Accepted or In Progress by this worker (already actioned, past the
   //    "awaiting accept" stage — kept separate from availableJobs so a job doesn't show in both tabs)
@@ -303,6 +372,16 @@ export default function FieldWorkerApp({
 
   // Actions
   const handleAcceptJobClick = (c: Complaint) => {
+    // Static demo job — just move it into "My Jobs" locally for the UI demo.
+    // There's no real complaint record behind DEMO-JOB-*, so we skip the
+    // backend update call entirely to avoid writing garbage data.
+    if ((c as any).assignedWorkerId === "__DEMO__") {
+      setSelectedTask({ ...c, status: "Accepted", assignedWorkerId: worker?.id, assignedWorkerName: worker?.name });
+      setActiveTab("my_jobs");
+      setDetailSubTab("nav");
+      return;
+    }
+
     if (onAcceptJob) {
       onAcceptJob(c.id);
     } else {
