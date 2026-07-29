@@ -52,7 +52,7 @@ import {
 import { Complaint, AIAnalysis } from "../types";
 import SmartCityMap from "./SmartCityMap";
 import AnimatedCounter from "./AnimatedCounter";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://civic-iq.onrender.com"; // Backend API base URL (set in .env)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3001"; // Backend API base URL (set in .env)
 // Predefined categories with friendly icons and descriptions
 const ISSUE_CATEGORIES = [
   {
@@ -218,11 +218,14 @@ export default function CitizenApp({
   // Reset internal scroll position to top every time the active screen changes,
   // so switching from a scrolled-down step (e.g. Review) to Confirm/Home
   // doesn't retain the old scroll offset and jump jarringly.
-  useEffect(() => {
-    if (screenContainerRef.current) {
-      screenContainerRef.current.scrollTop = 0;
-    }
-  }, [screen]);
+useEffect(() => {
+  requestAnimationFrame(() => {
+    screenContainerRef.current?.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  });
+}, []);
 
   // ===== REAL FIREBASE AUTH STATE =====
   // user holds the live Firebase Auth user (+ Firestore profile fields merged in)
