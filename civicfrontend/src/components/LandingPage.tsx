@@ -97,13 +97,7 @@ export default function LandingPage({ onSelectRole }: LandingPageProps) {
 
           {/* Call To Action Buttons */}
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => onSelectRole("docs")}
-              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-bold text-slate-500 hover:text-[#1565C0] transition-colors"
-            >
-              <span>Design Specs</span>
-              <ExternalLink className="h-3 w-3" />
-            </button>
+          
             <button
               onClick={() => scrollToSection("portals")}
               className="bg-[#1565C0] hover:bg-[#0D47A1] text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm flex items-center gap-2 hover:shadow-md focus:ring-4 focus:ring-[#1565C0]/20"
