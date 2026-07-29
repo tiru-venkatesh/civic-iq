@@ -247,28 +247,42 @@ useEffect(() => {
 
   // Listen for Firebase Auth state on mount. If already logged in, skip splash/login.
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
-      if (fbUser) {
-        let photoURL = fbUser.photoURL || null;
-        let name = fbUser.displayName || "Citizen";
-        try {
-          const userDocSnap = await getDoc(doc(db, "users", fbUser.uid));
-          if (userDocSnap.exists()) {
-            const data = userDocSnap.data();
-            photoURL = data.photoURL ?? photoURL;
-            name = data.name ?? name;
-          }
-        } catch (err) {
-          console.error("Failed to load user profile doc:", err);
-        }
-        setUser({ uid: fbUser.uid, name, email: fbUser.email || "", photoURL });
-        setScreen((prev) => (prev === "splash" || prev === "login" ? "home" : prev));
-      } else {
-        setUser(null);
+    let unsubscribe: () => void;
+
+    const init = async () => {
+      // App ఎప్పుడు తెరిచినా cached Firebase session ఉన్నా ignore చేసి,
+      // signed-out స్టేట్ నుండే మొదలవ్వాలి — అప్పుడే login screen తప్పకుండా కనిపిస్తుంది.
+      try {
+        await signOut(auth);
+      } catch {
+        // signed-in user ఎవరూ లేకపోతే safe గా no-op
       }
-      setAuthChecked(true);
-    });
-    return () => unsubscribe();
+
+      unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+        if (fbUser) {
+          let photoURL = fbUser.photoURL || null;
+          let name = fbUser.displayName || "Citizen";
+          try {
+            const userDocSnap = await getDoc(doc(db, "users", fbUser.uid));
+            if (userDocSnap.exists()) {
+              const data = userDocSnap.data();
+              photoURL = data.photoURL ?? photoURL;
+              name = data.name ?? name;
+            }
+          } catch (err) {
+            console.error("Failed to load user profile doc:", err);
+          }
+          setUser({ uid: fbUser.uid, name, email: fbUser.email || "", photoURL });
+          setScreen((prev) => (prev === "splash" || prev === "login" ? "home" : prev));
+        } else {
+          setUser(null);
+        }
+        setAuthChecked(true);
+      });
+    };
+
+    init();
+    return () => unsubscribe?.();
   }, []);
 
   const resetAuthForm = () => {
