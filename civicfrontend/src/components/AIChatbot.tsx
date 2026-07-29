@@ -30,7 +30,7 @@ interface AIChatbotProps {
 // Base URL of the civicbackend Express server (single Gemini backend, 7 role prompts).
 // Set VITE_BACKEND_URL (Vite) or NEXT_PUBLIC_BACKEND_URL (Next.js) in your frontend .env
 // to the deployed backend URL, e.g. https://civicbackend.onrender.com
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001"; // Default to localhost for local dev
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://civic-iq.onrender.com"; // Default to localhost for local dev
 
 // Maps this component's UI-facing "activeRole" to the backend's AI role/prompt.
 const ROLE_MAP: Record<NonNullable<AIChatbotProps["activeRole"]>, string> = {
