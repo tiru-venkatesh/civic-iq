@@ -52,7 +52,7 @@ import {
 import { Complaint, AIAnalysis } from "../types";
 import SmartCityMap from "./SmartCityMap";
 import AnimatedCounter from "./AnimatedCounter";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3001"; // Backend API base URL (set in .env)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://civic-iq.onrender.com"; // Backend API base URL (set in .env)
 // Predefined categories with friendly icons and descriptions
 const ISSUE_CATEGORIES = [
   {
