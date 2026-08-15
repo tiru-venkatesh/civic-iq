@@ -476,6 +476,12 @@ export default function AdminDashboard({
                 <Navigation className="h-3.5 w-3.5" /> Live Operations Map
               </h4>
               <SmartMap
+                key={selectedCityKey}
+                center={
+                  cityData
+                    ? [cityData.centerLat, cityData.centerLng]
+                    : undefined
+                }
                 complaints={adjustedComplaints.map((c) => ({
                   id: c.id,
                   title: c.title,
