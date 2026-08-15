@@ -122,6 +122,27 @@ export function SmartCityMap({
     setInfoWindow(new g.maps.InfoWindow());
   }, [innerMap]);
 
+  // Re-apply center/zoom after every fullscreen transition.
+  //
+  // The gmp-map element's built-in fullscreen button re-parents the map into
+  // the browser's fullscreen container, which re-triggers the element's own
+  // internal initial-center logic — NOT our computedCenter. Without this,
+  // entering/exiting fullscreen snaps the map to some unrelated default
+  // location instead of staying on the city being viewed.
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      // Wait a frame so the fullscreen resize/re-parent has finished before
+      // we set center/zoom — setting it too early gets silently overwritten.
+      requestAnimationFrame(() => {
+        if (!mapElRef.current) return;
+        mapElRef.current.center = { lat: computedCenter.lat, lng: computedCenter.lng };
+        mapElRef.current.zoom = zoom;
+      });
+    };
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, [computedCenter, zoom]);
+
   // Live location tracking — continuous GPS fix via watchPosition, not a
   // one-shot getCurrentPosition. The marker is created once on the first fix
   // and then just has its .position mutated on every update, so it moves
