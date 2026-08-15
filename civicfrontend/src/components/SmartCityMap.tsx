@@ -7,6 +7,8 @@
 // 3. Optional but recommended for production: VITE_GOOGLE_MAPS_MAP_ID=... (create one
 //    in Cloud Console → Map Management). Without it, markers fall back to DEMO_MAP_ID,
 //    which works fine for testing but is not meant for production traffic.
+// 4. New prop: showLiveLocation (default true) — draws a live blue-dot marker that
+//    tracks the browser's geolocation continuously via watchPosition (not a one-shot fix).
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { ComplaintMapItem, SmartMapProps, WorkerMapItem } from "./types";
@@ -21,6 +23,7 @@ declare global {
         center?: string;
         zoom?: string;
         "map-id"?: string;
+        "gesture-handling"?: string;
       };
     }
   }
@@ -122,9 +125,12 @@ export function SmartMap({
   zoom = 12,
   darkMode = false,
   showLegend = true,
-}: SmartMapProps) {
+  showLiveLocation = true,
+}: SmartMapProps & { showLiveLocation?: boolean }) {
   const mapElRef = useRef<GmpMapElement | null>(null);
   const markersRef = useRef<Map<string, MarkerEntry>>(new Map());
+  const liveMarkerRef = useRef<any>(null);
+  const watchIdRef = useRef<number | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -238,7 +244,9 @@ export function SmartMap({
           background: color,
           borderColor: "#FFFFFF",
           glyphColor: "#FFFFFF",
-          glyph: "🚚",
+          // NOTE: `glyph` is deprecated by the Maps SDK — `glyphText` is the
+          // replacement for character/emoji glyphs (`glyphSrc` is for image URLs).
+          glyphText: "🚚",
           scale: 0.9,
         });
         const marker = new g.maps.marker.AdvancedMarkerElement({
@@ -257,13 +265,63 @@ export function SmartMap({
     });
   }, [status, complaints, workers, selectedComplaintId, onSelectComplaint, onSelectWorker]);
 
-  // Clean up all markers on unmount.
+  // Live location tracking — continuous GPS fix via watchPosition, not a
+  // one-shot getCurrentPosition. The marker is created once on the first fix
+  // and then just has its .position mutated on every update, so it moves
+  // smoothly instead of flickering/re-creating.
+  useEffect(() => {
+    if (status !== "ready" || !showLiveLocation || !navigator.geolocation) return;
+    const g = window.google;
+
+    watchIdRef.current = navigator.geolocation.watchPosition(
+      (pos) => {
+        if (!g?.maps?.marker || !mapElRef.current?.innerMap) return;
+        const { latitude, longitude } = pos.coords;
+
+        if (!liveMarkerRef.current) {
+          const dot = document.createElement("div");
+          dot.style.cssText = `
+            width: 16px; height: 16px; border-radius: 50%;
+            background: #2563EB; border: 3px solid #fff;
+            box-shadow: 0 0 0 2px rgba(37,99,235,0.4);
+          `;
+          liveMarkerRef.current = new g.maps.marker.AdvancedMarkerElement({
+            map: mapElRef.current.innerMap,
+            position: { lat: latitude, lng: longitude },
+            content: dot,
+            zIndex: 999,
+            title: "Your location",
+          });
+        } else {
+          liveMarkerRef.current.position = { lat: latitude, lng: longitude };
+        }
+      },
+      (err) => console.warn("Live location error:", err),
+      { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+    );
+
+    return () => {
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+    };
+  }, [status, showLiveLocation]);
+
+  // Clean up all markers (including the live-location marker) on unmount.
   useEffect(() => {
     return () => {
       markersRef.current.forEach((entry) => {
         entry.marker.map = null;
       });
       markersRef.current.clear();
+      if (liveMarkerRef.current) {
+        liveMarkerRef.current.map = null;
+        liveMarkerRef.current = null;
+      }
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+      }
     };
   }, []);
 
@@ -300,6 +358,7 @@ export function SmartMap({
       <gmp-map
         ref={mapElRef as any}
         map-id={mapId}
+        gesture-handling="greedy"
         style={{ width: "100%", height: "100%", display: status === "ready" ? "block" : "none" }}
       />
     </div>
