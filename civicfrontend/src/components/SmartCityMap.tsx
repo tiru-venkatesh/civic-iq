@@ -9,12 +9,11 @@
 // 4. New prop: showLiveLocation (default true) — draws a live blue-dot marker that
 //    tracks the browser's geolocation continuously via watchPosition (not a one-shot fix).
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import type { SmartMapProps } from "./types";
+import type { SmartMapProps } from "./maps/types";
 import { getApiKey, getMapId, loadGoogleMaps } from "./maps/utils";
-import ComplaintMarkers from "./ComplaintMarkers";
-import WorkerMarkers from "./WorkerMarkers";
-import Legend from "./Legend";
+import ComplaintMarkers from "./maps/ComplaintMarkers";
+import WorkerMarkers from "./maps/WorkerMarkers";
+import Legend from "./maps/Legend";
 
 declare global {
   namespace JSX {
