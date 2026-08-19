@@ -67,8 +67,6 @@ export default function AIChatbot({ mode = "floating", activeRole = "landing" }:
   const [isLoading, setIsLoading] = useState(false);
   const [scrollY, setScrollY] = useState(0);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
   // Keep open if embedded
   useEffect(() => {
     if (mode === "embedded") {
@@ -249,7 +247,6 @@ export default function AIChatbot({ mode = "floating", activeRole = "landing" }:
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} />
         </div>
 
         {/* Input Form */}
