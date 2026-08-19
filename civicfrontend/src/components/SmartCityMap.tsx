@@ -11,7 +11,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { SmartMapProps } from "./types";
-import { getApiKey, getMapId, loadGoogleMaps } from "./utils";
+import { getApiKey, getMapId, loadGoogleMaps } from "./maps/utils";
 import ComplaintMarkers from "./ComplaintMarkers";
 import WorkerMarkers from "./WorkerMarkers";
 import Legend from "./Legend";
