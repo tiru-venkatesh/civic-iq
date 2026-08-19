@@ -216,17 +216,7 @@ export default function CitizenApp({
   // Ref for the internal scrollable screen container (see useEffect below).
   const screenContainerRef = useRef<HTMLDivElement>(null);
 
-  // Reset internal scroll position to top every time the active screen changes,
-  // so switching from a scrolled-down step (e.g. Review) to Confirm/Home
-  // doesn't retain the old scroll offset and jump jarringly.
-useEffect(() => {
-  requestAnimationFrame(() => {
-    screenContainerRef.current?.scrollTo({
-      top: 0,
-      behavior: "instant",
-    });
-  });
-}, []);
+
 
   // ===== REAL FIREBASE AUTH STATE =====
   // user holds the live Firebase Auth user (+ Firestore profile fields merged in)
