@@ -69,11 +69,6 @@ export default function AIChatbot({ mode = "floating", activeRole = "landing" }:
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom of chat
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isLoading]);
-
   // Keep open if embedded
   useEffect(() => {
     if (mode === "embedded") {
