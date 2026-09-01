@@ -25,15 +25,15 @@ function readEnv(key: string): string | undefined {
 }
 
 export function getApiKey(): string {
-  return readEnv("VITE_GOOGLE_MAPS_API_KEY") || readEnv("REACT_APP_GOOGLE_MAPS_API_KEY") || "";
+  return readEnv("GOOGLE_MAPS_API_KEY") || readEnv("REACT_APP_GOOGLE_MAPS_API_KEY") || "";
 }
 
 export function getMapId(darkMode?: boolean): string {
   if (darkMode) {
-    const dark = readEnv("VITE_GOOGLE_MAPS_MAP_ID_DARK") || readEnv("REACT_APP_GOOGLE_MAPS_MAP_ID_DARK");
+    const dark = readEnv("GOOGLE_MAPS_MAP_ID_DARK") || readEnv("REACT_APP_GOOGLE_MAPS_MAP_ID_DARK");
     if (dark) return dark;
   }
-  return readEnv("VITE_GOOGLE_MAPS_MAP_ID") || readEnv("REACT_APP_GOOGLE_MAPS_MAP_ID") || "DEMO_MAP_ID";
+  return readEnv("GOOGLE_MAPS_MAP_ID") || readEnv("REACT_APP_GOOGLE_MAPS_MAP_ID") || "DEMO_MAP_ID";
 }
 
 // Module-level singleton so multiple SmartMap instances (or React StrictMode's
