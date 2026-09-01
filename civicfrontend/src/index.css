@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-gov-blue: #1565C0;
+  --color-gov-blue-dark: #0D47A1;
+  --color-gov-blue-light: #E3F2FD;
+  --color-gov-blue-hover: #1976D2;
+  --color-gov-slate: #374151;
+  --color-gov-bg: #F5F7FA;
+  --color-gov-card: #FFFFFF;
+}
+
+/* Custom scrollbar for an enterprise dashboard look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Focus rings and reset rules for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-gov-blue);
+  outline-offset: 2px;
+}
+
+/* AI Sidebar Suggestion Cards & Action Chips Hover Animation & Soft Glow */
+#right-ai-sidebar-container .ai-suggestion-card,
+#right-ai-sidebar-container .ai-prompt-chip {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+}
+
+#right-ai-sidebar-container .ai-suggestion-card:hover,
+#right-ai-sidebar-container .ai-prompt-chip:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px -4px rgba(21, 101, 192, 0.18), 0 2px 6px -1px rgba(0, 0, 0, 0.05);
+}
