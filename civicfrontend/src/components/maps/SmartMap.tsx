@@ -2,7 +2,7 @@
 //
 // Setup:
 // 1. No npm install needed for Maps itself — the script is injected at runtime.
-// 2. .env: VITE_GOOGLE_MAPS_API_KEY=... (or REACT_APP_GOOGLE_MAPS_API_KEY=... for CRA)
+// 2. .env: GOOGLE_MAPS_API_KEY=... (or REACT_APP_GOOGLE_MAPS_API_KEY=... for CRA)
 // 3. Optional but recommended for production: VITE_GOOGLE_MAPS_MAP_ID=... (create one
 //    in Cloud Console → Map Management). Without it, markers fall back to DEMO_MAP_ID,
 //    which works fine for testing but is not meant for production traffic.
@@ -71,7 +71,7 @@ export function SmartMap({
     if (!apiKey) {
       setStatus("error");
       setErrorMsg(
-        "Missing Google Maps API key. Set VITE_GOOGLE_MAPS_API_KEY (Vite) or REACT_APP_GOOGLE_MAPS_API_KEY (CRA) in your .env file."
+        "Missing Google Maps API key. Set GOOGLE_MAPS_API_KEY (Vite) or REACT_APP_GOOGLE_MAPS_API_KEY (CRA) in your .env file."
       );
       return;
     }
