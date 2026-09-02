@@ -2,19 +2,30 @@
 //
 // Setup:
 // 1. No npm install needed for Maps itself — the script is injected at runtime.
-// 2. .env: GOOGLE_MAPS_API_KEY=... (or REACT_APP_GOOGLE_MAPS_API_KEY=... for CRA)
+// 2. .env (Vite):  VITE_GOOGLE_MAPS_API_KEY=AIza...
+//    .env (CRA):   REACT_APP_GOOGLE_MAPS_API_KEY=AIza...
+//    (Vite ONLY exposes VITE_-prefixed vars to client code — this was the
+//    cause of the "Missing Google Maps API key" error. See utils.ts.)
 // 3. Optional but recommended for production: VITE_GOOGLE_MAPS_MAP_ID=... (create one
 //    in Cloud Console → Map Management). Without it, markers fall back to DEMO_MAP_ID,
 //    which works fine for testing but is not meant for production traffic.
 // 4. New prop: showLiveLocation (default true) — draws a live blue-dot marker that
 //    tracks the browser's geolocation continuously via watchPosition (not a one-shot fix).
+//
+// FIXED vs. the version this replaces:
+//   - Missing default `React` import (crashed on `React.DetailedHTMLProps` below).
+//   - Imports pointed at "./maps/..." from inside components/maps/ itself,
+//     i.e. components/maps/maps/... which doesn't exist. This file lives in
+//     components/maps/, so its siblings (types, utils, ComplaintMarkers,
+//     WorkerMarkers, Legend) are imported with no "maps/" prefix — same as
+//     the original SmartMap.tsx in the same folder.
 
-import { useRef, useState, useMemo, useEffect } from "react";
-import type { SmartMapProps } from "./maps/types";
-import { getApiKey, getMapId, loadGoogleMaps } from "./maps/utils";
-import ComplaintMarkers from "./maps/ComplaintMarkers";
-import WorkerMarkers from "./maps/WorkerMarkers";
-import Legend from "./maps/Legend";
+import React, { useRef, useState, useMemo, useEffect } from "react";
+import type { SmartMapProps } from "./types";
+import { getApiKey, getMapId, loadGoogleMaps } from "./utils";
+import ComplaintMarkers from "./ComplaintMarkers";
+import WorkerMarkers from "./WorkerMarkers";
+import Legend from "./Legend";
 
 declare global {
   namespace JSX {
@@ -77,7 +88,7 @@ export function SmartCityMap({
     if (!apiKey) {
       setStatus("error");
       setErrorMsg(
-        "Missing Google Maps API key. Set GOOGLE_MAPS_API_KEY (Vite) or REACT_APP_GOOGLE_MAPS_API_KEY (CRA) in your .env file."
+        "Missing Google Maps API key. Set VITE_GOOGLE_MAPS_API_KEY (Vite) or REACT_APP_GOOGLE_MAPS_API_KEY (CRA) in your .env file, then restart the dev server."
       );
       return;
     }
